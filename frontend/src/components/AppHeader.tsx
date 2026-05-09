@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth/AuthProvider';
-import { Bell, Home, LogOut, Search, User as UserIcon } from 'lucide-react';
+import { Bell, Compass, Home, LogOut, Search, User as UserIcon } from 'lucide-react';
 
 export function AppHeader() {
   const auth = useAuth();
@@ -26,6 +26,9 @@ export function AppHeader() {
         <nav className="ml-auto flex items-center gap-1 text-slate-600 dark:text-slate-400">
           <Link href="/home" aria-label="ホーム" className="rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-800">
             <Home className="size-5" />
+          </Link>
+          <Link href="/explore" aria-label="探索" className="rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-800">
+            <Compass className="size-5" />
           </Link>
           <Link href="/search" aria-label="検索" className="rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-800">
             <Search className="size-5" />
