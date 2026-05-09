@@ -55,5 +55,3 @@ end
 group :test do
   gem "rswag-specs"
 end
-
-

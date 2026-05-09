@@ -26,6 +26,9 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           run_install: false
+          # frontend/package.json の packageManager フィールドから
+          # pnpm のバージョンを読み取らせる（リポジトリルートにはないため）
+          package_json_file: frontend/package.json
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
