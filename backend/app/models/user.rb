@@ -1,17 +1,12 @@
 class User < ApplicationRecord
+  # devise-jwt の JTI Matcher 戦略：
+  # users.jti カラムと JWT ペイロードの jti を突合して失効を判定する。
+  # ログアウト時に jti を新しい UUID に置き換えれば、過去の JWT はすべて無効化される。
+  include Devise::JWT::RevocationStrategies::JTIMatcher
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: self
-
-  # devise-jwt の Denylist 戦略は別テーブルが望ましいが、
-  # 初期構成ではユーザー側の jti カラムで管理（self が strategy）
-  def self.revoke_jwt(payload, user)
-    user.update_column(:jti, SecureRandom.uuid)
-  end
-
-  def self.jwt_revoked?(payload, user)
-    payload["jti"] != user.jti
-  end
 
   # ---- 投稿・コメント・本棚関連 ----
   has_many :posts, dependent: :destroy
@@ -59,12 +54,4 @@ class User < ApplicationRecord
   validates :display_name, presence: true, length: { maximum: 50 }
   validates :bio, length: { maximum: 200 }, allow_blank: true
   validates :reading_goal, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
-
-  before_validation :ensure_jti
-
-  private
-
-  def ensure_jti
-    self.jti ||= SecureRandom.uuid
-  end
 end
