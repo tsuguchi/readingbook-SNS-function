@@ -41,7 +41,7 @@ resource "aws_ecs_task_definition" "backend" {
     }]
     environment = [
       { name = "RAILS_ENV", value = "production" },
-      { name = "DATABASE_URL", value = "postgres://postgres:${random_password.db_master.result}@${aws_db_instance.main.address}:5432/${aws_db_instance.main.db_name}" },
+      { name = "DATABASE_URL", value = "postgres://postgres:${urlencode(random_password.db_master.result)}@${aws_db_instance.main.address}:5432/${aws_db_instance.main.db_name}" },
       { name = "REDIS_URL", value = "redis://${aws_elasticache_cluster.main.cache_nodes[0].address}:6379/0" },
       { name = "AWS_REGION", value = var.aws_region },
       { name = "AWS_S3_BUCKET", value = aws_s3_bucket.assets.bucket },
@@ -120,7 +120,7 @@ resource "aws_ecs_task_definition" "sidekiq" {
     command   = ["bundle", "exec", "sidekiq"]
     environment = [
       { name = "RAILS_ENV", value = "production" },
-      { name = "DATABASE_URL", value = "postgres://postgres:${random_password.db_master.result}@${aws_db_instance.main.address}:5432/${aws_db_instance.main.db_name}" },
+      { name = "DATABASE_URL", value = "postgres://postgres:${urlencode(random_password.db_master.result)}@${aws_db_instance.main.address}:5432/${aws_db_instance.main.db_name}" },
       { name = "REDIS_URL", value = "redis://${aws_elasticache_cluster.main.cache_nodes[0].address}:6379/0" },
       { name = "AWS_REGION", value = var.aws_region },
       { name = "AWS_S3_BUCKET", value = aws_s3_bucket.assets.bucket },

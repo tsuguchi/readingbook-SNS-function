@@ -56,9 +56,9 @@ variable "rds_allocated_storage" {
 }
 
 variable "rds_postgres_version" {
-  description = "PostgreSQL バージョン"
+  description = "PostgreSQL バージョン（ap-northeast-1 で利用可能なもの）"
   type        = string
-  default     = "16.4"
+  default     = "16.13"
 }
 
 variable "rds_multi_az" {
