@@ -2,6 +2,71 @@
 
 読書記録を共有するソーシャルネットワーキングアプリケーション。
 
+## デモ（AWS 上の動作）
+
+ローカル Docker / AWS ECS Fargate の両方で動作します。以下は AWS にデプロイした
+本番環境（ALB 直結、HTTP）でのスクリーンショットです。
+
+### 1. アカウント作成
+
+新規ユーザーは `/signup` から登録します。メール / パスワード / @ハンドル / 表示名のシンプルな 4 項目。
+
+![サインアップ画面](docs/screenshots/01-signup.png)
+
+入力後の状態：
+
+![サインアップ入力後](docs/screenshots/02-signup-filled.png)
+
+### 2. ログイン後のホームタイムライン（空状態）
+
+サインアップ後は自動的に JWT を発行し `/home` へ遷移。フォロー中ユーザーが居ない初期状態は
+案内文付きの空状態が表示されます。
+
+![空のタイムライン](docs/screenshots/03-timeline-empty.png)
+
+### 3. 投稿コンポーザ
+
+`#タグ` を本文中に書くと自動でハッシュタグとして抽出・関連付けされます。残り文字数も表示。
+
+![投稿コンポーザ](docs/screenshots/04-compose-post.png)
+
+### 4. 投稿後のタイムライン
+
+投稿は即座にタイムライン先頭に追加され、本文中の `#読了` `#技術書` `#AWS` がリンクとして
+ハイライトされます。
+
+![投稿後のタイムライン](docs/screenshots/05-timeline-with-post.png)
+
+### 5. いいね（楽観的 UI）
+
+ハートアイコンクリックで即時赤化、サーバ応答でカウントが確定。
+
+![いいね済み](docs/screenshots/06-liked.png)
+
+### 6. ユーザープロフィール
+
+`/users/:handle` で投稿数 / フォロワー / フォロー中、自分の投稿一覧を確認できます。
+自分のプロフィールには「プロフィール編集」リンクが表示されます。
+
+![ユーザープロフィール](docs/screenshots/07-profile.png)
+
+### 7. 投稿詳細 + コメント
+
+投稿カードのコメントアイコンから詳細ページへ。下部の sticky 入力欄でコメント投稿できます。
+
+![投稿詳細とコメント](docs/screenshots/08-post-detail-with-comment.png)
+
+### 8. 横断検索
+
+`/search` でユーザー / 本 / 投稿 / タグを 1 リクエストで横断検索。
+
+![検索結果](docs/screenshots/09-search-results.png)
+
+### 公開 URL
+
+dev 環境（最小構成・HTTP のみ・~$60/月）で公開中：
+**http://readingbook-sns-dev-alb-130523896.ap-northeast-1.elb.amazonaws.com**
+
 ## 機能
 
 - 投稿（読書感想・レビュー）
