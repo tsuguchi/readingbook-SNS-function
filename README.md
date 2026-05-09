@@ -2,7 +2,17 @@
 
 読書記録を共有するソーシャルネットワーキングアプリケーション。
 
-## デモ（AWS 上の動作）
+## 🌐 ライブデモ
+
+**👉 [http://readingbook-sns-dev-alb-130523896.ap-northeast-1.elb.amazonaws.com](http://readingbook-sns-dev-alb-130523896.ap-northeast-1.elb.amazonaws.com)**
+
+AWS（ECS Fargate / RDS PostgreSQL / ElastiCache Redis / ALB）で稼働する dev 環境です。
+新規アカウントを作成して投稿・いいね・フォロー・検索などの機能を実際に試せます。
+
+> ⚠️ 最小構成（HTTP のみ・ALB DNS 直結・~$60/月）で運用しているため、HTTPS / 独自ドメイン /
+> 高可用化は未対応です。クラウド料金抑制のため予告なく停止する可能性があります。
+
+## デモ画面（AWS 環境のスクリーンショット）
 
 ローカル Docker / AWS ECS Fargate の両方で動作します。以下は AWS にデプロイした
 本番環境（ALB 直結、HTTP）でのスクリーンショットです。
@@ -62,10 +72,7 @@
 
 ![検索結果](docs/screenshots/09-search-results.png)
 
-### 公開 URL
-
-dev 環境（最小構成・HTTP のみ・~$60/月）で公開中：
-**http://readingbook-sns-dev-alb-130523896.ap-northeast-1.elb.amazonaws.com**
+実際に試してみたい方は冒頭の **[ライブデモ](#-ライブデモ)** からどうぞ。
 
 ## 機能
 
