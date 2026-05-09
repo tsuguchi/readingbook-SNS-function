@@ -1,0 +1,29 @@
+FROM node:22-alpine
+
+# pnpm を corepack 経由で有効化
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# 必要に応じて Alpine 用の追加パッケージ
+RUN apk add --no-cache libc6-compat tzdata
+
+ENV TZ=Asia/Tokyo \
+    NEXT_TELEMETRY_DISABLED=1
+
+WORKDIR /app
+
+# package.json / lockfile / workspace 設定を先にコピー（bootstrap 後に存在）
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
+# --ignore-scripts: post-install スクリプト由来の警告（IGNORED_BUILDS）で
+# Docker ビルドが落ちないようにする。実バイナリ（sharp 等）は npm パッケージ
+# 同梱のプリビルトバイナリが使われるため動作する。
+RUN if [ -f pnpm-lock.yaml ]; then \
+      pnpm install --frozen-lockfile --ignore-scripts; \
+    else \
+      pnpm install --ignore-scripts; \
+    fi
+
+# 残りのソースは compose のボリュームマウントで反映
+COPY . .
+
+EXPOSE 3000
+CMD ["pnpm", "dev"]

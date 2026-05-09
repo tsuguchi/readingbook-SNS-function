@@ -1,0 +1,59 @@
+source "https://rubygems.org"
+
+gem "rails", "~> 7.2.3", ">= 7.2.3.1"
+gem "pg", "~> 1.1"
+gem "puma", ">= 5.0"
+gem "tzinfo-data", platforms: %i[ windows jruby ]
+gem "bootsnap", require: false
+
+# 認証 / 認可
+gem "devise"
+gem "devise-jwt"
+gem "pundit"
+
+# 検索
+gem "pg_search"
+
+# 非同期ジョブ
+gem "sidekiq"
+gem "redis"
+
+# 画像 / Active Storage
+gem "aws-sdk-s3", require: false
+gem "image_processing"
+
+# シリアライザ
+gem "jsonapi-serializer"
+
+# ページネーション
+gem "pagy"
+
+# プッシュ通知
+gem "fcm"
+gem "webpush"
+
+# CORS / レート制限
+gem "rack-cors"
+gem "rack-attack"
+
+group :development, :test do
+  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  gem "brakeman", require: false
+  gem "rubocop-rails-omakase", require: false
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+  gem "faker"
+  gem "rubocop-rspec", require: false
+  gem "dotenv-rails"
+end
+
+group :development do
+  gem "rswag-api"
+  gem "rswag-ui"
+end
+
+group :test do
+  gem "rswag-specs"
+end
+
+

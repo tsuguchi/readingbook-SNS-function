@@ -1,0 +1,27 @@
+# Windows と Linux/macOS 混在を想定し、コミット時は LF に統一する
+* text=auto eol=lf
+
+# Windows 専用スクリプトのみ CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# シェルスクリプトは必ず LF（Docker コンテナで実行されるため）
+*.sh text eol=lf
+Dockerfile* text eol=lf
+docker-compose*.yml text eol=lf
+entrypoint.sh text eol=lf
+
+# バイナリ
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.pdf binary
+*.zip binary
+*.tar binary
+*.gz binary
+*.woff binary
+*.woff2 binary
