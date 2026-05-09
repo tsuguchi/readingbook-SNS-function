@@ -17,6 +17,17 @@ Rails.application.routes.draw do
       # タイムライン
       get "timeline/home",    to: "timeline/home#index"
       get "timeline/explore", to: "timeline/explore#index"
+
+      # 通知（要件 LK-N / FL-N / RP-N）
+      resources :notifications, only: [ :index ] do
+        member do
+          post :read
+        end
+        collection do
+          post :read_all
+          get  :unread_count
+        end
+      end
       # /api/v1/me 配下の各種一覧・管理
       namespace :me do
         resources :likes, only: [ :index ]
