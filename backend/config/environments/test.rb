@@ -64,4 +64,9 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # テスト環境ではすべてのホストを許可（Host Authorization 制限を実質無効化）。
+  # Rack::Test がデフォルトで使う www.example.com を含め、どのホストも通すため
+  # 任意の文字列にマッチする正規表現を追加する。
+  config.hosts << /.*/
 end

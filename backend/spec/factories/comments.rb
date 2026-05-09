@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :comment do
-    post { nil }
-    user { nil }
-    body { "MyText" }
-    deleted_at { "2026-05-09 18:40:09" }
+    post
+    user
+    body { "Sample comment body" }
+    deleted_at { nil }
   end
 end
