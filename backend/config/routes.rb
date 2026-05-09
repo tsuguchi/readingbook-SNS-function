@@ -18,6 +18,10 @@ Rails.application.routes.draw do
       get "timeline/home",    to: "timeline/home#index"
       get "timeline/explore", to: "timeline/explore#index"
 
+      # 検索（要件 SR-01〜SR-09）
+      get "search",         to: "search#index"
+      get "search/suggest", to: "search#suggest"
+
       # 通知（要件 LK-N / FL-N / RP-N）
       resources :notifications, only: [ :index ] do
         member do
@@ -33,6 +37,12 @@ Rails.application.routes.draw do
         resources :likes, only: [ :index ]
         resources :blocks, only: [ :index ]
         resources :mutes, only: [ :index ]
+        # 検索履歴
+        resources :search_histories, only: %i[index destroy] do
+          collection do
+            delete "", action: :destroy_all
+          end
+        end
         # 自分宛のフォローリクエスト：accept / reject はメンバーアクション
         resources :follow_requests, only: [ :index ], param: :user_handle do
           member do
