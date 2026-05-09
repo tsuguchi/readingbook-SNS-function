@@ -1,0 +1,21 @@
+# Terraform 状態ファイル（機密情報を含むため絶対にコミットしない）
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+.terraform.tfstate.lock.info
+
+# 個別の値ファイル（.example のみコミット）
+*.tfvars
+!*.tfvars.example
+
+# Terraform プラグインキャッシュ
+.terraform/
+.terraform.lock.hcl
+
+# プラン出力
+*.tfplan
+plan.out
+
+# CLI 設定
+.terraformrc
+terraform.rc

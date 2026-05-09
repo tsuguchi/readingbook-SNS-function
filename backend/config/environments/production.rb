@@ -42,7 +42,9 @@ Rails.application.configure do
   # config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  # 環境変数 RAILS_FORCE_SSL で制御。最小構成（HTTP のみ）の dev では false に。
+  # 本番化で ACM 証明書 + HTTPS リスナーを有効化したら "true" に戻すこと。
+  config.force_ssl = ENV.fetch("RAILS_FORCE_SSL", "true") == "true"
 
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
