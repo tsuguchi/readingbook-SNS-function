@@ -1,12 +1,14 @@
 'use client';
 
 import { use } from 'react';
+import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { AppHeader } from '@/components/AppHeader';
 import { AuthGuard } from '@/components/AuthGuard';
 import { PostCard } from '@/components/PostCard';
 import { fetchUser, fetchUserPosts } from '@/lib/api/users';
 import { useAuth } from '@/lib/auth/AuthProvider';
+import { FollowButton } from '@/components/FollowButton';
 
 export default function UserProfilePage({ params }: { params: Promise<{ handle: string }> }) {
   // Next.js 15+ で params は Promise になった
@@ -54,10 +56,15 @@ function Profile({ handle }: { handle: string }) {
             <strong>{user.counts.following}</strong> フォロー中
           </p>
         </div>
-        {isMe && (
-          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-400">
-            あなた
-          </span>
+        {isMe ? (
+          <Link
+            href="/settings/profile"
+            className="rounded-full border border-slate-300 px-4 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200"
+          >
+            プロフィール編集
+          </Link>
+        ) : (
+          <FollowButton handle={handle} initialFollowing={false} />
         )}
       </div>
     </section>

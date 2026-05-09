@@ -2,6 +2,7 @@ import { apiClient } from './client';
 import type {
   ApiCollection,
   ApiResponse,
+  CommentResource,
   LikeToggleResponse,
   PostResource,
 } from './types';
@@ -33,4 +34,12 @@ export async function likePost(id: string): Promise<LikeToggleResponse> {
 
 export async function unlikePost(id: string): Promise<LikeToggleResponse> {
   return apiClient.delete<LikeToggleResponse>(`posts/${id}/like`);
+}
+
+export async function fetchComments(postId: string): Promise<ApiCollection<CommentResource>> {
+  return apiClient.get<ApiCollection<CommentResource>>(`posts/${postId}/comments`);
+}
+
+export async function createComment(postId: string, body: string): Promise<ApiResponse<CommentResource>> {
+  return apiClient.post<ApiResponse<CommentResource>>(`posts/${postId}/comments`, { comment: { body } });
 }
