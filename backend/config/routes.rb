@@ -48,11 +48,16 @@ Rails.application.routes.draw do
         # 投稿に紐づくコメント（一覧・作成）
         resources :comments, only: %i[index create]
         # いいね（トグル）／いいねしたユーザー一覧（要件 LK-06）
-        # 単数 resource：POST/DELETE /posts/:post_id/like
         resource  :like, only: %i[create destroy], controller: "posts/likes"
-        # 複数 resources：GET /posts/:post_id/likes
         resources :likes, only: [ :index ], controller: "posts/likes"
+        # リポスト（要件 RP-01〜RP-09）
+        resource  :repost, only: %i[create destroy], controller: "posts/reposts"
+        resources :reposts, only: [ :index ], controller: "posts/reposts"
+        post "quote_repost", to: "posts/reposts#create_quote"
       end
+
+      # 引用リポストの単独削除（投稿削除と同等扱い）
+      resources :reposts, only: [ :destroy ]
 
       # コメント単独操作（編集・削除）
       resources :comments, only: %i[update destroy] do
