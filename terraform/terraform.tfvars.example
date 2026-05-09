@@ -1,0 +1,15 @@
+# このファイルを `terraform.tfvars` にコピーして編集してください
+# `terraform.tfvars` は .gitignore で除外されています
+
+project_name = "readingbook-sns"
+environment  = "dev"
+aws_region   = "ap-northeast-1"
+
+# 任意：ALB に接続を許可する CIDR を絞ると安全
+# alb_ingress_cidr = "203.0.113.0/24"
+
+# 任意：本番化時に有効化
+# rds_multi_az              = true
+# rds_backup_retention_days = 7
+# backend_desired_count     = 2
+# frontend_desired_count    = 2
