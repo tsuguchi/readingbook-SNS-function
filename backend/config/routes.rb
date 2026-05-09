@@ -13,9 +13,27 @@ Rails.application.routes.draw do
 
       # 認証済みユーザー自身の情報
       resource :me, only: [ :show ], controller: "me"
-      # 自分が押したいいね一覧（要件 LK-05）
+      # /api/v1/me 配下の各種一覧・管理
       namespace :me do
         resources :likes, only: [ :index ]
+        resources :blocks, only: [ :index ]
+        resources :mutes, only: [ :index ]
+        # 自分宛のフォローリクエスト：accept / reject はメンバーアクション
+        resources :follow_requests, only: [ :index ], param: :user_handle do
+          member do
+            post :accept
+            post :reject
+          end
+        end
+      end
+
+      # ユーザー操作（フォロー / ブロック / ミュート / フォロワー・フォロイー一覧）
+      resources :users, only: [], param: :handle do
+        resource :follow, only: %i[create destroy], controller: "users/follows"
+        resource :block,  only: %i[create destroy], controller: "users/blocks"
+        resource :mute,   only: %i[create destroy], controller: "users/mutes"
+        resources :followers, only: [ :index ], controller: "users/followers"
+        resources :following, only: [ :index ], controller: "users/following"
       end
 
       # 投稿
