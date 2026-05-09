@@ -2,13 +2,14 @@ name: Docker Build Verification
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
     paths:
       - '**/Dockerfile*'
       - 'docker-compose.yml'
       - '.dockerignore'
       - '.github/workflows/docker-build.yml'
   pull_request:
+    branches: [main, develop]
     paths:
       - '**/Dockerfile*'
       - 'docker-compose.yml'

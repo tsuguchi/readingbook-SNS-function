@@ -65,6 +65,25 @@ docker compose up -d
 
 詳細手順は [環境構築.md](環境構築.md)。
 
+## ブランチ運用
+
+| ブランチ | 役割 |
+|---|---|
+| `main` | 本番ブランチ。本番デプロイ対象。develop からの PR でのみ更新する |
+| `develop` | 開発統合ブランチ。**デフォルトブランチ**。フィーチャブランチからの PR を受け入れる |
+| `feature/*` | 機能開発用ブランチ。develop から派生し、develop に PR を出す |
+| `hotfix/*` | 本番緊急修正用。main から派生し、main と develop 両方にマージする |
+
+### 典型フロー
+
+```
+feature/like-api ──► develop ──► main
+                       ▲
+hotfix/critical-bug ───┴──────► main
+```
+
+CI は `main` と `develop` への push / PR で起動します。
+
 ## ライセンス
 
 未定（個人プロジェクト）
