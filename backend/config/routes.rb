@@ -76,10 +76,22 @@ Rails.application.routes.draw do
         resources :likes, only: [ :index ], controller: "comments/likes"
       end
 
-      # 本へのいいね（書籍マスタにはオーナーが居ないため index は提供しない）
-      resources :books, only: [] do
+      # 書籍マスタ
+      resources :books, only: %i[index show create] do
+        # この本に紐づく投稿一覧
+        resources :posts, only: [ :index ], controller: "books/posts"
+        # 本へのいいね（書籍マスタにはオーナーが居ないため index は提供しない）
         resource :like, only: %i[create destroy], controller: "books/likes"
       end
+
+      # ハッシュタグ
+      # name にスラッシュ等の特殊文字が入らない前提で param: :name を使う
+      resources :hashtags, only: [ :show ], param: :name do
+        resources :posts, only: [ :index ], controller: "hashtags/posts"
+      end
+
+      # ジャンルマスタ
+      resources :genres, only: [ :index ]
     end
   end
 
