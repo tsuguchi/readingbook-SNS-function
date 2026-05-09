@@ -1,0 +1,39 @@
+# Next.js 本番用 Dockerfile（マルチステージビルド）
+# - deps: 依存解決のみ
+# - builder: pnpm build で Next.js を本番ビルド
+# - runner: ビルド成果物 + 本番依存だけのスリムなイメージ
+
+FROM node:22-alpine AS deps
+RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml* ./
+RUN pnpm install --frozen-lockfile --ignore-scripts
+
+FROM node:22-alpine AS builder
+RUN corepack enable && corepack prepare pnpm@latest --activate
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+ENV NEXT_TELEMETRY_DISABLED=1
+ARG NEXT_PUBLIC_API_BASE
+ENV NEXT_PUBLIC_API_BASE=${NEXT_PUBLIC_API_BASE}
+RUN pnpm build
+
+FROM node:22-alpine AS runner
+RUN corepack enable && corepack prepare pnpm@latest --activate
+WORKDIR /app
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1 \
+    PORT=3000 \
+    HOSTNAME=0.0.0.0
+
+# 必要なファイルだけコピー
+COPY --from=builder /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml* ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/next.config.ts ./
+
+EXPOSE 3000
+CMD ["pnpm", "start"]
