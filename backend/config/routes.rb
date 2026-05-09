@@ -11,8 +11,12 @@ Rails.application.routes.draw do
       post   "auth/login",  to: "auth/sessions#create"
       delete "auth/logout", to: "auth/sessions#destroy"
 
-      # 認証済みユーザー自身の情報
-      resource :me, only: [ :show ], controller: "me"
+      # 認証済みユーザー自身の情報（取得・プロフィール更新）
+      resource :me, only: %i[show update], controller: "me"
+
+      # タイムライン
+      get "timeline/home",    to: "timeline/home#index"
+      get "timeline/explore", to: "timeline/explore#index"
       # /api/v1/me 配下の各種一覧・管理
       namespace :me do
         resources :likes, only: [ :index ]
@@ -27,8 +31,11 @@ Rails.application.routes.draw do
         end
       end
 
-      # ユーザー操作（フォロー / ブロック / ミュート / フォロワー・フォロイー一覧）
-      resources :users, only: [], param: :handle do
+      # ユーザープロフィール詳細
+      resources :users, only: [ :show ], param: :handle do
+        # 投稿一覧
+        resources :posts, only: [ :index ], controller: "users/posts"
+        # フォロー / ブロック / ミュート / フォロワー・フォロイー一覧
         resource :follow, only: %i[create destroy], controller: "users/follows"
         resource :block,  only: %i[create destroy], controller: "users/blocks"
         resource :mute,   only: %i[create destroy], controller: "users/mutes"
