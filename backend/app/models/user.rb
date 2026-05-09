@@ -54,4 +54,16 @@ class User < ApplicationRecord
   validates :display_name, presence: true, length: { maximum: 50 }
   validates :bio, length: { maximum: 200 }, allow_blank: true
   validates :reading_goal, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
+
+  # ---- ブロック関係判定 ----
+  # self <-> other のいずれか方向でブロック関係が成立しているか。
+  # 要件 BL-03 / LK-08 / RP-09 でいいね・リポスト・フォローの拒否判定に使う。
+  def blocked_with?(other)
+    return false if other.nil? || self == other
+
+    Block.where(
+      "(blocker_id = :a AND blocked_id = :b) OR (blocker_id = :b AND blocked_id = :a)",
+      a: id, b: other.id
+    ).exists?
+  end
 end
