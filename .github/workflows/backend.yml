@@ -84,12 +84,20 @@ jobs:
           sudo apt-get install -y libvips libpq-dev
 
       - name: Setup database
-        run: bundle exec rails db:create db:schema:load --trace
+        run: |
+          bundle exec rails db:create
+          if [ -f db/schema.rb ] || [ -f db/structure.sql ]; then
+            bundle exec rails db:schema:load
+          elif ls db/migrate/*.rb >/dev/null 2>&1; then
+            bundle exec rails db:migrate
+          else
+            echo "No schema or migrations yet — skipping load."
+          fi
 
       - name: Run RSpec
         run: |
-          if [ -d spec ]; then
+          if [ -d spec ] && find spec -name '*_spec.rb' | grep -q .; then
             bundle exec rspec
           else
-            echo "No spec/ directory yet — skipping. Add specs and remove this guard."
+            echo "No specs yet — skipping. Add specs and remove this guard."
           fi
